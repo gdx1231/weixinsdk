@@ -5,10 +5,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 微信企业号
@@ -19,7 +20,7 @@ import org.json.JSONObject;
 public class QyConfig {
 	private static String API_ROOT = "https://qyapi.weixin.qq.com/cgi-bin/";
 	private static HashMap<Integer, QyConfig> MAP = new HashMap<Integer, QyConfig>();
-	private static Logger LOOGER = Logger.getLogger(QyConfig.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(QyConfig.class);
 
 	/**
 	 * 实例化对象，如果缓存中存在，直接返回，如果超时或不存在，重新生成
@@ -126,9 +127,8 @@ public class QyConfig {
 		// https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=ACCESS_TOKEN
 		String url = API_ROOT + "message/send?access_token=" + this.access_token_;
 		/**
-		 * { "touser" : "UserID1|UserID2|UserID3", "toparty" : " PartyID1|PartyID2 ",
-		 * "totag" : " TagID1 | TagID2 ", "msgtype" : "text", "agentid" : 1, "text" : {
-		 * "content" : "你的快递已到，请携带工卡前往邮件中心领取。\n出发前可查看<a
+		 * { "touser" : "UserID1|UserID2|UserID3", "toparty" : " PartyID1|PartyID2 ", "totag" : " TagID1 | TagID2 ",
+		 * "msgtype" : "text", "agentid" : 1, "text" : { "content" : "你的快递已到，请携带工卡前往邮件中心领取。\n出发前可查看<a
 		 * href=\"http://work.weixin.qq.com\">邮件中心视频实况</a>，聪明避开排队。" }, "safe":0 }
 		 */
 
@@ -341,8 +341,8 @@ public class QyConfig {
 	/**
 	 * 邀请成员关注
 	 * 
-	 * 认证号优先使用微信推送邀请关注，如果没有weixinid字段则依次对手机号，邮箱绑定的微信进行推送，全部没有匹配则通过邮件邀请关注。
-	 * 邮箱字段无效则邀请失败。 非认证号只通过邮件邀请关注。邮箱字段无效则邀请失败。 已关注以及被禁用成员不允许发起邀请关注请求。
+	 * 认证号优先使用微信推送邀请关注，如果没有weixinid字段则依次对手机号，邮箱绑定的微信进行推送，全部没有匹配则通过邮件邀请关注。 邮箱字段无效则邀请失败。 非认证号只通过邮件邀请关注。邮箱字段无效则邀请失败。
+	 * 已关注以及被禁用成员不允许发起邀请关注请求。
 	 * 
 	 * 为避免骚扰成员，企业应遵守以下邀请规则：
 	 * 
@@ -503,9 +503,9 @@ public class QyConfig {
 			return obj;
 		} catch (JSONException e) {
 			this.setError(e.getMessage());
-			LOOGER.error(url);
-			LOOGER.error(body);
-			LOOGER.error(e);
+			LOGGER.error(url);
+			LOGGER.error(body.toString());
+			LOGGER.error(e.getMessage());
 
 			return null;
 		}
@@ -588,7 +588,7 @@ public class QyConfig {
 
 	public void setError(String errmsg) {
 		this.lastErr = errmsg;
-		Ssl.log("错误" + errmsg);
+		LOGGER.error("错误" + errmsg);
 
 	}
 
