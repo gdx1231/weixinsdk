@@ -71,6 +71,21 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<attach>true</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.2.0</version>
@@ -90,6 +105,29 @@
 					</additionalOptions>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-lib-src-webapps</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<echo>copy ${project.build.finalName}.jar to ${basedir}/../../workspace.newVersion/allclass/lib/</echo>
+								<copy todir="${basedir}/../../workspace.newVersion/allclass/lib/">
+									<fileset dir="${project.build.directory}">
+										<include name="${project.build.finalName}*" />
+									</fileset>
+								</copy>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 	</build>
@@ -97,7 +135,7 @@
 		<dependency>
 			<groupId>com.gdxsoft.easyweb</groupId>
 			<artifactId>emp-script-utils</artifactId>
-			<version>[1.0.4,]</version>
+			<version>[1.1.1,]</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
